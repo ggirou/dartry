@@ -42,6 +42,6 @@ Element get counter() => query("#counter");
 Element get counterButton() => query("#counterButton"); 
 
 set counterActive(bool _active) {
-  counterButton.classes.removeAll(activeStyles);
-  counterButton.classes.add(activeStyles[_active ? 1 : 0]);
+  counterButton.classes..removeAll(activeStyles)
+                       ..add(activeStyles[_active ? 1 : 0]);
 }
