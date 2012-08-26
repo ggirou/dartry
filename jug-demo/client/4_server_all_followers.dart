@@ -4,7 +4,7 @@
 
 WebSocket webSocket;
 
-var buttonIds = const ["counterButton"];
+var buttonIds = const ["counterButton", "ggirouGplus", "ggirouTwitter", "nfrancoisGplus", "nfrancoisTwitter"];
 
 void main() {
   int port = 14912;

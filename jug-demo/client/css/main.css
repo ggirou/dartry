@@ -19,3 +19,56 @@
   vertical-align: middle;
   width: 300px;
 }
+
+.container {
+  display: table;
+  position: relative;
+}
+
+.row {
+  display: table-row;
+  position: relative;
+}
+
+.cell {
+  display: table-cell;
+  position: relative;
+  text-align: center;
+  padding: 15px;
+}
+
+.counter {
+  width: 175px;
+  height: 175px;
+  display: table;
+  position: relative;
+}
+
+.counter img {
+  border: 0;
+  width: 64px;
+  height: 64px;
+  float: left;
+}
+
+.counter span {
+}
+
+.counter h1, span {
+  display: table-row;
+}
+.counter span {
+  text-align: center;
+  font-size: 90px;
+  line-height: 60px;
+}
+
+.counter h2, h3, h4 {
+  display: table-row;
+  position: absolute;
+  bottom: 5px;
+}
+
+.counter h3 {
+  font-size: 16px;
+}
