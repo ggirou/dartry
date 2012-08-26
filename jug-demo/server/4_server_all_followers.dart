@@ -3,6 +3,7 @@
 #import('dart:io');
 #import('dart:isolate');
 #import('package:who_listen_me/who_listen_me.dart');
+#import('../shared/dartry.dart');
 
 class TickHandler {
   Set<WebSocketConnection> connections;
@@ -30,13 +31,13 @@ class TickHandler {
   tick(var _timer) {
     request = circles.whoCircleMe('115816334172157652403');
     request..onError = ((error) => print(error))
-        ..onResponse = ((response) => send(response.totalCirclers.toString()));
+        ..onResponse = ((response) => send(new FollowersCount("counterButton", response.totalCirclers)));
   }
   
-  send(String message) {
+  send(FollowersCount message) {
     if(isRunning) {
       print("Send message: $message");
-      connections.forEach((WebSocketConnection connection) => connection.send(message));
+      connections.forEach((WebSocketConnection connection) => connection.send(message.toString()));
     }
   }
   
