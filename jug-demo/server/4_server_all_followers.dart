@@ -11,9 +11,11 @@ class TickHandler {
   CirclesApi circles = new CirclesApi();
   CirclesRequest request;
 
-  TickHandler(String basePath) : connections = new Set<WebSocketConnection>() {
+  TickHandler() : connections = new Set<WebSocketConnection>() {
     start();
   }
+  
+  bool get isRunning => timer != null;
 
   start() {
     timer = new Timer.repeating(1000, tick);
@@ -31,10 +33,10 @@ class TickHandler {
   tick(var _timer) {
     request = circles.whoCircleMe('115816334172157652403');
     request..onError = ((error) => print(error))
-        ..onResponse = ((response) => send(new FollowersCount("counterButton", response.totalCirclers)));
+        ..onResponse = ((response) => send(new CounterData("counterButton", response.totalCirclers)));
   }
   
-  send(FollowersCount message) {
+  send(CounterData message) {
     if(isRunning) {
       print("Send message: $message");
       connections.forEach((WebSocketConnection connection) => connection.send(message.toString()));
@@ -61,26 +63,19 @@ class TickHandler {
       connections.remove(conn); // onClosed isn't being called ??
     };
   }
-  
-  bool get isRunning() => timer != null;
-}
-
-runServer(String basePath, int port) {
-  HttpServer server = new HttpServer();
-  WebSocketHandler wsHandler = new WebSocketHandler();
-  wsHandler.onOpen = new TickHandler(basePath).onOpen;
-  
-  server.addRequestHandler((req) => req.path == "/ws", wsHandler.onRequest);
-  server.onError = (error) => print(error);
-  server.listen('127.0.0.1', port);
-  print('listening for connections on http://127.0.0.1:$port');
-  print("Basepath: $basePath");
 }
 
 main() {
   // 14 Septembre 2012 ! :p
   var port = 14912;
-  var scriptLocation = new File(new Options().script).directorySync().path;
-  var basepath = new Path("$scriptLocation/../client/").canonicalize().toNativePath();
-  runServer(basepath, port);
+
+  HttpServer server = new HttpServer();
+  
+  WebSocketHandler wsHandler = new WebSocketHandler();
+  wsHandler.onOpen = new TickHandler().onOpen;
+  server.defaultRequestHandler = wsHandler.onRequest;
+  
+  server.onError = (error) => print(error);
+  server.listen('127.0.0.1', port);
+  print('listening for connections on http://127.0.0.1:$port');
 }

@@ -8,7 +8,7 @@ var buttonIds = const ["counterButton", "ggirouGplus", "ggirouTwitter", "nfranco
 
 void main() {
   int port = 14912;
-  String url = "ws://127.0.0.1:$port/ws";
+  String url = "ws://127.0.0.1:$port";
   
   init(url);
   
@@ -23,14 +23,14 @@ init(String url) {
   webSocket.on.close.add((e) => print("Disconnected"));
   webSocket.on.message.add((MessageEvent e) {
     print('Message received: ${e.data}');
-    FollowersCount count = new FollowersCount.parse(e.data);
+    CounterData count = new CounterData.parse(e.data);
     var counter = new CounterElement(count.id);
     counter.active = true;
     counter.value = count.value.toString();
   });
 }
 
-send(FollowersCount message){
+send(CounterData message){
   print("Send message: $message");
   webSocket.send(message.toString());
 }
@@ -56,7 +56,7 @@ class CounterElement {
   
   toggle() {
     active = !active;
-    send(new FollowersCount(id, active));
+    send(new CounterData(id, active));
   }
 
   get id => button.id;

@@ -1,4 +1,3 @@
-
 #import('dart:html');
 #import('dart:isolate');
 
@@ -8,11 +7,6 @@ int count = 0;
 Timer timer;
 
 void main() {
-  // TODO : pub server?
-  // Server
-  // Communication : timer coté serveur avec websocket
-  // Communication : appel google+, twitter, etc...
-  
   start();
   counterButton.on.click.add((e) => toggle());
 }
@@ -38,8 +32,8 @@ void tick(var _timer) {
 
 showCount(String value) => counter.innerHTML = value;
 
-Element get counter() => query("#counter"); 
-Element get counterButton() => query("#counterButton"); 
+Element get counter => query("#counter"); 
+Element get counterButton => query("#counterButton"); 
 
 set counterActive(bool _active) {
   counterButton.classes..removeAll(activeStyles)

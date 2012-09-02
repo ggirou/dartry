@@ -1,10 +1,10 @@
-class FollowersCount {
+class CounterData {
   String id;
   var value;
   
-  FollowersCount(this.id, this.value);
+  CounterData(this.id, this.value);
   
-  FollowersCount.parse(String json) {
+  CounterData.parse(String json) {
     var obj = JSON.parse(json);
     id = obj["id"];
     value = obj["value"];

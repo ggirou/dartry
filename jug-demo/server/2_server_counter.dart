@@ -8,9 +8,11 @@ class TickHandler {
   int counter = 0;
   Timer timer;
 
-  TickHandler(String basePath) : connections = new Set<WebSocketConnection>() {
+  TickHandler() : connections = new Set<WebSocketConnection>() {
     start();
   }
+
+  bool get isRunning => timer != null;
 
   start() {
     timer = new Timer.repeating(1000, tick);
@@ -51,29 +53,22 @@ class TickHandler {
     
     conn.onError = (e) {
       print("Connection error");
-      connections.remove(conn); // onClosed isn't being called ??
+      connections.remove(conn);
     };
   }
-  
-  bool get isRunning() => timer != null;
-}
-
-runServer(String basePath, int port) {
-  HttpServer server = new HttpServer();
-  WebSocketHandler wsHandler = new WebSocketHandler();
-  wsHandler.onOpen = new TickHandler(basePath).onOpen;
-  
-  server.addRequestHandler((req) => req.path == "/ws", wsHandler.onRequest);
-  server.onError = (error) => print(error);
-  server.listen('127.0.0.1', port);
-  print('listening for connections on http://127.0.0.1:$port');
-  print("Basepath: $basePath");
 }
 
 main() {
   // 14 Septembre 2012 ! :p
   var port = 14912;
-  var scriptLocation = new File(new Options().script).directorySync().path;
-  var basepath = new Path("$scriptLocation/../client/").canonicalize().toNativePath();
-  runServer(basepath, port);
+
+  HttpServer server = new HttpServer();
+  
+  WebSocketHandler wsHandler = new WebSocketHandler();
+  wsHandler.onOpen = new TickHandler().onOpen;
+  server.defaultRequestHandler = wsHandler.onRequest;
+  
+  server.onError = (error) => print(error);
+  server.listen('127.0.0.1', port);
+  print('listening for connections on http://127.0.0.1:$port');
 }
