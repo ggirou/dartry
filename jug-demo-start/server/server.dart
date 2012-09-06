@@ -8,25 +8,21 @@ class TickHandler {
   Timer timer;
 
   TickHandler() {
-    start();
+    toggle();
   }
 
-  bool get isRunning => timer != null;
-
-  start() {
-    timer = new Timer.repeating(1000, tick);
-  }
-  
-  stop() {
-    timer.cancel();
-    timer = null;
-  }
-  
   toggle() {
-    isRunning ? stop() : start();
+    if(timer == null) {
+      timer =  new Timer.repeating(1000, tick); 
+    } else {
+      timer.cancel();
+      timer = null;
+    }
   }
   
   tick(var _timer) {
+    counter++;
+    print("Counter: $counter");
     // TODO send something
   }
 }
