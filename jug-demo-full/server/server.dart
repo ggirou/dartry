@@ -8,11 +8,12 @@
 typedef Future<int> callFollowers();
 
 class TickHandler {
+  num _count = 0;
   Set<WebSocketConnection> connections;
   Timer timer;
   CirclesApi circles = new CirclesApi();
   
-  Map<String, callFollowers> followers = {
+  Map<String, callFollowers> cerclers = {
     "counterButton" : () {
       var completer = new Completer<int>();
       var request = new CirclesApi().whoCircleMe('115816334172157652403');
@@ -33,7 +34,10 @@ class TickHandler {
       request..onError = ((error) => print(error))
           ..onResponse = ((response) => completer.complete(response.totalCirclers));
       return completer.future;
-    },
+    }                                  
+  };
+  
+  Map<String, callFollowers> followers = {
     "ggirouTwitter" : () {
       var completer = new Completer<int>();
       var request = new FollowersApi().getFollowerNumberByNickname("girouguillaume");
@@ -70,7 +74,11 @@ class TickHandler {
   }
   
   tick(var _timer) {
-    followers.forEach((key, callFollowers) => callFollowers().then((number) => send(new CounterData(key, number))));
+    cerclers.forEach((key, callFollowers) => callFollowers().then((number) => send(new CounterData(key, number))));
+    if(_count%10 == 0){
+      followers.forEach((key, callFollowers) => callFollowers().then((number) => send(new CounterData(key, number))));
+    }
+    _count++;
   }
   
   send(CounterData message) {
