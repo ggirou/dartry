@@ -1,6 +1,6 @@
 index.html        
         <script type="application/dart" src="jug_demo.dart"></script>
-        <script src="../../jug-demo-misc/dart.js"></script>
+        <script src="js/dart.js"></script>
 
 pubspec.yaml
 	name: dartry 
